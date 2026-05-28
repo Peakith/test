@@ -5,27 +5,20 @@ interface Props {
 }
 
 export default function ProgressBar({ progress, showLabel = true, height = 'md' }: Props) {
-  const heightClass = height === 'sm' ? 'h-1.5' : 'h-2'
-
-  const barColor =
-    progress === 100
-      ? 'bg-green-500'
-      : progress >= 60
-        ? 'bg-blue-500'
-        : progress >= 30
-          ? 'bg-violet-500'
-          : 'bg-slate-400'
+  const h = height === 'sm' ? 'h-[3px]' : 'h-[4px]'
 
   return (
-    <div className="flex items-center gap-2">
-      <div className={`flex-1 bg-slate-100 rounded-full overflow-hidden ${heightClass}`}>
+    <div className="flex items-center gap-3">
+      <div className={`flex-1 bg-white/10 overflow-hidden ${h}`}>
         <div
-          className={`${heightClass} ${barColor} rounded-full transition-all duration-500`}
+          className={`${h} bg-brutaal-yellow transition-all duration-500`}
           style={{ width: `${progress}%` }}
         />
       </div>
       {showLabel && (
-        <span className="text-xs font-medium text-slate-500 w-8 text-right">{progress}%</span>
+        <span className="text-[11px] font-bold tracking-[0.08em] text-white/50 w-8 text-right tabular-nums">
+          {progress}%
+        </span>
       )}
     </div>
   )
