@@ -26,16 +26,21 @@ export default function AddTaskForm({ onAdd }: Props) {
     return (
       <button
         onClick={() => { setPhase('Intake'); setOpen(true) }}
-        className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium mt-2 px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em]
+          text-white/35 hover:text-brutaal-yellow transition-colors mt-1 px-3 py-2
+          border border-transparent hover:border-brutaal-yellow/30"
       >
-        <Plus className="h-4 w-4" />
+        <Plus className="h-3.5 w-3.5" />
         Taak toevoegen
       </button>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+    <form onSubmit={handleSubmit} className="mt-2 p-4 border border-brutaal-yellow/30 bg-brutaal-yellow/5">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-brutaal-yellow mb-3">
+        Nieuwe taak
+      </p>
       <div className="flex flex-col gap-2">
         <input
           autoFocus
@@ -43,30 +48,33 @@ export default function AddTaskForm({ onAdd }: Props) {
           placeholder="Taaknaam..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          className="w-full bg-brutaal-black border border-white/15 px-3 py-2 text-sm text-white
+            placeholder:text-white/25 focus:outline-none focus:border-brutaal-yellow/60 transition-colors"
         />
         <select
           value={phase}
           onChange={(e) => setPhase(e.target.value as Phase)}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          className="w-full bg-brutaal-black border border-white/15 px-3 py-2 text-[11px] font-bold
+            uppercase tracking-[0.1em] text-white/70 focus:outline-none focus:border-brutaal-yellow/60
+            transition-colors cursor-pointer"
         >
           {PHASES.filter((p) => p !== 'Afgerond').map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
+            <option key={p} value={p}>{p}</option>
           ))}
         </select>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-1">
           <button
             type="submit"
-            className="flex-1 bg-blue-600 text-white text-sm font-medium rounded-lg px-3 py-2 hover:bg-blue-700 transition-colors"
+            className="flex-1 bg-brutaal-yellow text-brutaal-black text-[10px] font-black uppercase
+              tracking-[0.14em] px-3 py-2 hover:bg-white transition-colors"
           >
             Toevoegen
           </button>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="flex-1 bg-white text-slate-600 text-sm font-medium rounded-lg px-3 py-2 border border-slate-200 hover:bg-slate-100 transition-colors"
+            className="flex-1 border border-white/15 text-white/40 text-[10px] font-black uppercase
+              tracking-[0.14em] px-3 py-2 hover:border-white/35 hover:text-white/60 transition-colors"
           >
             Annuleren
           </button>

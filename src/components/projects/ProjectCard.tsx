@@ -6,74 +6,69 @@ import { computeProgress } from '@/lib/phase'
 import PhaseBadge from '@/components/ui/PhaseBadge'
 import StatusBadge from '@/components/ui/StatusBadge'
 import ProgressBar from '@/components/ui/ProgressBar'
-import { CalendarDays, CheckSquare, Clock } from 'lucide-react'
 
-interface Props {
-  project: Project
-}
+interface Props { project: Project }
 
 export default function ProjectCard({ project }: Props) {
   const router = useRouter()
   const progress = computeProgress(project.tasks)
-  const openTasks = project.tasks.filter((t) => !t.completed).length
-  const doneTasks = project.tasks.filter((t) => t.completed).length
+  const open = project.tasks.filter((t) => !t.completed).length
+  const done = project.tasks.filter((t) => t.completed).length
 
   const deadlineDate = new Date(project.deadline)
   const isOverdue = deadlineDate < new Date() && project.status !== 'completed'
-  const formattedDeadline = deadlineDate.toLocaleDateString('nl-NL', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  })
+  const formatted = deadlineDate.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' })
+
+  const navigate = () => router.push(`/projects/${project.id}`)
 
   return (
     <div
-      onDoubleClick={() => router.push(`/projects/${project.id}`)}
-      className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-200 cursor-pointer group p-5 flex flex-col gap-4"
+      onDoubleClick={navigate}
+      className="group relative border border-white/10 bg-brutaal-surface p-5 flex flex-col gap-4
+        hover:border-brutaal-yellow/60 hover:bg-brutaal-surface2 transition-all duration-150 cursor-pointer"
       title="Dubbelklik om te openen"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <h3 className="font-semibold text-slate-800 text-base leading-tight truncate group-hover:text-blue-700 transition-colors">
+      {/* Yellow left accent on hover */}
+      <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-brutaal-yellow scale-y-0 group-hover:scale-y-100 transition-transform duration-150 origin-bottom" />
+
+      {/* Top row */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base font-black uppercase tracking-[0.05em] text-white leading-tight line-clamp-2 group-hover:text-brutaal-yellow transition-colors">
             {project.name}
           </h3>
-          <p className="text-sm text-slate-500 mt-0.5 truncate">{project.client}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/40 mt-1.5">
+            {project.client}
+          </p>
         </div>
         <StatusBadge status={project.status} />
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <PhaseBadge phase={project.currentPhase} size="sm" />
-      </div>
+      {/* Phase */}
+      <PhaseBadge phase={project.currentPhase} size="sm" />
 
-      <div>
-        <ProgressBar progress={progress} />
-      </div>
+      {/* Progress */}
+      <ProgressBar progress={progress} />
 
-      <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-50 pt-3">
-        <div className="flex items-center gap-3">
-          <span className="flex items-center gap-1">
-            <CheckSquare className="h-3.5 w-3.5 text-green-500" />
-            {doneTasks} afgerond
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5 text-slate-400" />
-            {openTasks} open
-          </span>
+      {/* Meta row */}
+      <div className="flex items-center justify-between pt-1 border-t border-white/8">
+        <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.1em]">
+          <span className="text-brutaal-yellow">{done} ✓</span>
+          <span className="text-white/35">{open} open</span>
         </div>
-        <span className={`flex items-center gap-1 ${isOverdue ? 'text-red-500 font-medium' : ''}`}>
-          <CalendarDays className="h-3.5 w-3.5" />
-          {formattedDeadline}
+        <span className={`text-[10px] font-bold uppercase tracking-[0.08em] ${isOverdue ? 'text-red-400' : 'text-white/35'}`}>
+          {formatted}
         </span>
       </div>
 
+      {/* View button */}
       <button
-        onClick={(e) => {
-          e.stopPropagation()
-          router.push(`/projects/${project.id}`)
-        }}
+        onClick={(e) => { e.stopPropagation(); navigate() }}
         onDoubleClick={(e) => e.stopPropagation()}
-        className="w-full text-center text-xs text-blue-600 hover:text-blue-700 font-medium py-1.5 rounded-lg hover:bg-blue-50 transition-colors border border-blue-100"
+        className="w-full text-center text-[10px] font-black uppercase tracking-[0.18em] py-2
+          border border-white/10 text-white/40
+          hover:border-brutaal-yellow hover:text-brutaal-yellow hover:bg-brutaal-yellow/5
+          transition-all duration-100"
       >
         Bekijken →
       </button>

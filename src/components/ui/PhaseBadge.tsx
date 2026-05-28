@@ -6,12 +6,16 @@ interface Props {
 }
 
 export default function PhaseBadge({ phase, size = 'md' }: Props) {
-  const colors = PHASE_COLORS[phase]
-  const sizeClass = size === 'sm' ? 'text-xs px-2 py-0.5' : 'text-sm px-2.5 py-1'
+  const c = PHASE_COLORS[phase]
+  const sizeClass = size === 'sm'
+    ? 'text-[10px] px-2 py-0.5 tracking-[0.12em]'
+    : 'text-[11px] px-2.5 py-1 tracking-[0.14em]'
+
   return (
     <span
-      className={`inline-flex items-center rounded-full font-medium border ${colors.bg} ${colors.text} ${colors.border} ${sizeClass}`}
+      className={`inline-flex items-center gap-1.5 uppercase font-bold border ${c.bg} ${c.text} ${c.border} ${sizeClass}`}
     >
+      <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${c.dot}`} />
       {phase}
     </span>
   )

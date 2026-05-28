@@ -15,25 +15,35 @@ export default function TaskList({ tasks, onToggle, onDelete, onAdd }: Props) {
   const phasesWithTasks = PHASES.filter((phase) => tasks.some((t) => t.phase === phase))
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {phasesWithTasks.map((phase) => {
-        const phaseTasks = tasks
-          .filter((t) => t.phase === phase)
-          .sort((a, b) => a.order - b.order)
+        const phaseTasks = tasks.filter((t) => t.phase === phase).sort((a, b) => a.order - b.order)
         const completedCount = phaseTasks.filter((t) => t.completed).length
-        const colors = PHASE_COLORS[phase]
+        const allDone = completedCount === phaseTasks.length
+        const c = PHASE_COLORS[phase]
 
         return (
-          <div key={phase} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div className={`flex items-center justify-between px-4 py-3 ${colors.bg} border-b ${colors.border}`}>
+          <div key={phase} className={`border overflow-hidden ${allDone ? 'border-brutaal-yellow/25' : 'border-white/10'}`}>
+            {/* Phase header */}
+            <div className={`flex items-center justify-between px-4 py-2.5 border-b ${allDone ? 'bg-brutaal-yellow/8 border-brutaal-yellow/20' : 'bg-white/3 border-white/8'}`}>
               <div className="flex items-center gap-2">
-                <span className={`font-semibold text-sm ${colors.text}`}>{phase}</span>
+                <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
+                <span className={`text-[10px] font-black uppercase tracking-[0.16em] ${allDone ? 'text-brutaal-yellow' : c.text}`}>
+                  {phase}
+                </span>
+                {allDone && (
+                  <span className="text-[9px] font-black uppercase tracking-[0.12em] text-brutaal-yellow/70 ml-1">
+                    ✓ Afgerond
+                  </span>
+                )}
               </div>
-              <span className="text-xs text-slate-500 font-medium">
-                {completedCount}/{phaseTasks.length} afgerond
+              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-white/30">
+                {completedCount}/{phaseTasks.length}
               </span>
             </div>
-            <div className="px-1 py-1">
+
+            {/* Tasks */}
+            <div className="divide-y divide-white/5">
               {phaseTasks.map((task) => (
                 <TaskItem key={task.id} task={task} onToggle={onToggle} onDelete={onDelete} />
               ))}
@@ -42,7 +52,8 @@ export default function TaskList({ tasks, onToggle, onDelete, onAdd }: Props) {
         )
       })}
 
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-3">
+      {/* Add task */}
+      <div className="border border-white/8 p-3">
         <AddTaskForm onAdd={onAdd} />
       </div>
     </div>
